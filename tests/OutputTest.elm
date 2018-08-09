@@ -5,7 +5,7 @@ import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
 
 import Output exposing (..)
-import Messages
+import Text
 
 
 suite : Test
@@ -13,6 +13,6 @@ suite =
     describe "Intro"
     [ test "Returns the introduction" <|
         \_ ->
-            Expect.equal intro_message Messages.intro_message
+            Expect.equal intro_message Text.intro
             ]
 

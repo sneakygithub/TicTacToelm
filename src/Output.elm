@@ -1,7 +1,7 @@
 module Output exposing (..)
 
-import Messages
+import Text
 
 
 intro_message =
-  Messages.intro_message
+  Text.intro

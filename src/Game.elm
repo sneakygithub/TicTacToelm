@@ -1,5 +1,6 @@
 module Game exposing (..)
 
+
 continueGame : Bool -> String
 continueGame flag =
     case flag of
