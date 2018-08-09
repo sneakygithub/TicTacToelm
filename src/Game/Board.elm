@@ -1,4 +1,4 @@
-module Board exposing (..)
+module Game.Board exposing (..)
 
 import Array
 

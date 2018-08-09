@@ -1,10 +1,10 @@
-module GameTest exposing (..)
+module Game.GameTest exposing (..)
 
 import Expect
 import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
 
-import Game exposing (..)
+import Game.Game exposing (..)
 
 
 suite : Test

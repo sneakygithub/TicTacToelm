@@ -1,4 +1,4 @@
-module Game exposing (..)
+module Game.Game exposing (..)
 
 
 continueGame : Bool -> String

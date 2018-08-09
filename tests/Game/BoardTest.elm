@@ -1,10 +1,10 @@
-module BoardTest exposing (..)
+module Game.BoardTest exposing (..)
 
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
 
-import Board exposing (..)
+import Game.Board exposing (..)
 import Text
 
 
