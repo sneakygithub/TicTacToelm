@@ -1,11 +1,8 @@
 module Game.Game exposing (..)
 
+import Game.Board as Board
 
-continueGame : Bool -> String
-continueGame flag =
-    case flag of
-        True ->
-            "continue"
+continueGame : Board.Board -> Bool
+continueGame board =
+    not ( Board.boardFull board )
 
-        False ->
-            "game over"

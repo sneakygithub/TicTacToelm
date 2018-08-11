@@ -11,13 +11,27 @@ suite : Test
 suite =
     describe "Game"
         [ describe "continueGame"
-            [ test "Getting a true value continues the game" <|
+            [ test "A full board ends the game" <|
                 \() ->
-                    continueGame True
-                        |> Expect.equal "continue"
-            , test "Getting a false value ends the game" <|
+                    let
+                        fullBoard =
+                            [ Just "x", Just "o", Just "x"
+                            , Just "x", Just "o", Just "o"
+                            , Just "o", Just "x", Just "x"
+                            ]
+                    in
+                        continueGame fullBoard
+                            |> Expect.equal False
+            , test "When there are moves left, the game continues" <|
                 \() ->
-                    continueGame False
-                        |> Expect.equal "game over"
+                    let
+                        openBoard =
+                            [ Just "x", Just "o", Just "x"
+                            , Just "x", Nothing, Just "o"
+                            , Just "o", Just "x", Just "x"
+                            ]
+                    in
+                        continueGame openBoard
+                            |> Expect.equal True
             ]
         ]
