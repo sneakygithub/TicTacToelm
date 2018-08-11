@@ -1,12 +1,17 @@
 module BrowserInterface.Models exposing (..)
 
 import BrowserInterface.Msgs exposing (Msg)
+import Game.Board exposing (Board)
 
 type alias Model =
-    Bool
+    { continue : Bool
+    , board: Board
+    }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( True, Cmd.none )
+    ( Model True (List.repeat 9 Nothing), Cmd.none )
+
+
 

@@ -14,7 +14,7 @@ boardFull board =
 markBoardSpaceWith : Board -> Int -> String -> Board
 markBoardSpaceWith board space marker =
     Array.fromList board
-    |> Array.set space (Just marker)
-    |> Array.toList
+        |> Array.set space (Just marker)
+        |> Array.toList
 
 
