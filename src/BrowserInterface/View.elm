@@ -1,6 +1,6 @@
 module BrowserInterface.View exposing (..)
 
-import BrowserInterface.Models exposing (Model)
+import BrowserInterface.Models as Models exposing (Model)
 import BrowserInterface.Msgs exposing (Msg)
 import BrowserInterface.Msgs as Msgs
 
@@ -9,12 +9,21 @@ import Html.Attributes exposing (style, attribute)
 import Html.Events exposing (onClick)
 
 
+import Game.Game exposing (GameState)
+
+import Debug
+
 view : Model -> Html Msg
 view model =
-    loop model
+    case model.page of
+        Models.WelcomePage ->
+            div [] [ text "PLACEHOLDER WELCOME TEXT"]
+
+        Models.GamePage ->
+            loop (Debug.log "I hate this" model.gameState)
 
 
-loop : Model -> Html Msg
+loop : GameState -> Html Msg
 loop model =
     if model.continue then
         div []
