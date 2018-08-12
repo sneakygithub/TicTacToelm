@@ -63,4 +63,63 @@ suite =
                         markBoardSpaceWith startingBoard 8 "x"
                             |> Expect.equal expectedBoard
             ]
+        , describe "openSpaces"
+            [ test "returns an list of all space indices on an entirely empty board" <|
+                \() ->
+                    let
+                        board =
+                            [ Nothing, Nothing, Nothing
+                            , Nothing, Nothing, Nothing
+                            , Nothing, Nothing, Nothing
+                            ]
+                    in
+                        openSpaces board
+                            |> Expect.equal ( List.range 0 8 )
+            , test "returns a list only open of spaces on a partly empty board" <|
+                \() ->
+                    let
+                        board =
+                            [ Just "x", Just "o", Just "x"
+                            , Just "x", Nothing, Just "o"
+                            , Nothing, Nothing, Just "x"
+                            ]
+                    in
+                        openSpaces board
+                            |> Expect.equal [ 4, 6, 7 ]
+            , test "returns empty list when given a full board" <|
+                \() ->
+                    let
+                        board =
+                            [ Just "x", Just "o", Just "x"
+                            , Just "x", Just "o", Just "o"
+                            , Just "o", Just "x", Just "x"
+                            ]
+                    in
+                        openSpaces board
+                            |> Expect.equal []
+            ]
+        , describe "isOpenSpaceOnBoard"
+            [ test "returns true if space is open"
+                ( \() ->
+                    let
+                        board =
+                            [ Just "x", Just "o", Just "x"
+                            , Just "x", Nothing, Just "o"
+                            , Nothing, Nothing, Just "x"
+                            ]
+                    in
+                        isOpenSpaceOnBoard 4 board
+                            |> Expect.true "space should be open")
+            , test "returns false if space is taken"
+                ( \() ->
+                    let
+                        board =
+                            [ Just "x", Just "o", Just "x"
+                            , Just "x", Nothing, Just "o"
+                            , Nothing, Nothing, Just "x"
+                            ]
+                    in
+                        isOpenSpaceOnBoard 0 board
+                            |> Expect.false "space should be taken")
+            ]
         ]
