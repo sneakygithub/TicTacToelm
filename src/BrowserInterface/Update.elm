@@ -27,7 +27,7 @@ update msg model =
 
             Msgs.Mark space->
                 let
-                    updatedGameState = Game.takeTurn currentGameState.board space
+                    updatedGameState = Game.takeTurn currentGameState (Just space)
                 in
                     ( { model | gameState = updatedGameState }, Cmd.none )
 

@@ -3,7 +3,6 @@ module BrowserInterface.ViewTest exposing (..)
 import Expect
 import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
-import Debug
 import Html exposing (div, text)
 import Html.Events exposing (onClick)
 
@@ -180,74 +179,5 @@ suite =
                     in
                         renderBoard spaces
                             |> Expect.equal expectedResult
-            ]
-        , describe "split"
-            [ test "Splitting an empty list returns an empty list" <|
-                \() ->
-                    split 7 []
-                        |> Expect.equal []
-            , test "Splitting a list of 9 by 3 gets 3 sublists of equal length" <|
-                \() ->
-                    let
-                        splitableList =
-                            [ 'a', 'b', 'c',
-                              'd', 'e', 'f',
-                              'g', 'h', 'i'
-                            ]
-
-                        expectedResult =
-                            [ [ 'a', 'b', 'c' ]
-                            , [ 'd', 'e', 'f' ]
-                            , [ 'g', 'h', 'i' ]
-                            ]
-                    in
-                        split 3 splitableList
-                            |> Expect.equal expectedResult
-            , test "Splitting a list of 8 by 3 gets 3 sublists with the last list short one element" <|
-                \() ->
-                    let
-                        splitableList =
-                            [ 'a', 'b', 'c',
-                              'd', 'e', 'f',
-                              'g', 'h'
-                            ]
-
-                        expectedResult =
-                            [ [ 'a', 'b', 'c' ]
-                            , [ 'd', 'e', 'f' ]
-                            , [ 'g', 'h' ]
-                            ]
-                    in
-                        split 3 splitableList
-                            |> Expect.equal expectedResult
-            , test "Splitting a list of 8 by 2 gets 4 sublists with the last list short one element" <|
-                \() ->
-                    let
-                        splitableList =
-                            [ 'a', 'b', 'c',
-                              'd', 'e', 'f',
-                              'g', 'h'
-                            ]
-
-                        expectedResult =
-                            [ [ 'a', 'b']
-                            , [ 'c', 'd' ]
-                            , [ 'e', 'f' ]
-                            , [ 'g', 'h' ]
-                            ]
-                    in
-                        split 2 splitableList
-                            |> Expect.equal expectedResult
-            , test "Splitting a list by 0 gets an empty list" <|
-                \() ->
-                    let
-                        splitableList =
-                            [ 'a', 'b', 'c',
-                              'd', 'e', 'f',
-                              'g', 'h', 'i'
-                            ]
-                    in
-                        split 0 splitableList
-                            |> Expect.equal []
             ]
         ]

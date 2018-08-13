@@ -4,6 +4,8 @@ import BrowserInterface.Models as Models exposing (Model)
 import BrowserInterface.Msgs exposing (Msg)
 import BrowserInterface.Msgs as Msgs
 
+import Util.ListPlus as ListPlus
+
 import Html exposing (Html, button, div, text)
 import Html.Attributes exposing (style, attribute)
 import Html.Events exposing (onClick)
@@ -36,24 +38,12 @@ loop model =
             [ text "Game Over" ]
 
 
-split : Int -> List a -> List (List a)
-split nestedListLength list =
-  case List.take nestedListLength list of
-    [] ->
-        []
-
-    listHead ->
-        List.drop nestedListLength list
-            |> split nestedListLength
-            |> (::) listHead
-
-
 -- TODO: Could this adhere more to the SRP?
 renderBoard : List (Maybe String) -> Html Msg
 renderBoard board =
     let
         spaces = List.indexedMap renderSpace board
-        rows = split 3 spaces
+        rows = ListPlus.split 3 spaces
         renderedRows = List.map renderRow rows
 
     in

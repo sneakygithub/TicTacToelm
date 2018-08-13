@@ -5,7 +5,6 @@ import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
 
 import Game.Board exposing (..)
-import Text
 
 
 suite : Test
@@ -27,7 +26,7 @@ suite =
                               ]
                         |> Expect.true "expected the board to be full" )
             ]
-        , describe "markSpace"
+        , describe "markBoardSpaceWith"
             [ test "Returns a board with the desired space marked when the board is partly filled" <|
                 \() ->
                     let
@@ -43,7 +42,7 @@ suite =
                               Nothing, Nothing, Just "x"
                             ]
                     in
-                        markBoardSpaceWith startingBoard 4 "o"
+                        markBoardSpaceWith startingBoard 4 (Just "o")
                             |> Expect.equal expectedBoard
             , test "Returns a board with the desired space marked when given an empty board" <|
                 \() ->
@@ -60,8 +59,30 @@ suite =
                               Nothing, Nothing, Just "x"
                             ]
                     in
-                        markBoardSpaceWith startingBoard 8 "x"
+                        markBoardSpaceWith startingBoard 8 (Just "x")
                             |> Expect.equal expectedBoard
+            , test "Returns the same board it was given when the marker is Nothing" <|
+                \() ->
+                    let
+                        startingBoard =
+                            [ Just "x", Just "o", Just "x"
+                            , Just "x", Nothing, Just "o"
+                            , Nothing, Nothing, Just "x"
+                            ]
+                    in
+                        markBoardSpaceWith startingBoard 7 Nothing
+                            |> Expect.equal startingBoard
+            , test "Returns the same board it was given when the space is taken" <|
+                \() ->
+                    let
+                        startingBoard =
+                            [ Just "x", Just "o", Just "x"
+                            , Just "x", Nothing, Just "o"
+                            , Nothing, Nothing, Just "x"
+                            ]
+                    in
+                        markBoardSpaceWith startingBoard 8 ( Just "o" )
+                            |> Expect.equal startingBoard
             ]
         , describe "openSpaces"
             [ test "returns an list of all space indices on an entirely empty board" <|

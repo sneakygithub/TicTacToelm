@@ -1,7 +1,6 @@
 module Game.Board exposing (..)
 
 import Array
-import Debug
 
 
 type alias Board = List ( Maybe String )
@@ -15,11 +14,14 @@ boardFull board =
         |> (==) 0
 
 
-markBoardSpaceWith : Board -> Int -> String -> Board
+markBoardSpaceWith : Board -> Int -> Maybe String -> Board
 markBoardSpaceWith board space marker =
-    Array.fromList board
-        |> Array.set space (Just marker)
-        |> Array.toList
+    if isOpenSpaceOnBoard space board then
+        Array.fromList board
+            |> Array.set space marker
+            |> Array.toList
+    else
+        board
 
 
 isOpenSpaceOnBoard : Int -> Board -> Bool
@@ -39,5 +41,5 @@ openSpaces board =
     in
         List.length board
             |>List.range indexOffset
-            |> List.map (\index -> index - indexOffset)
-            |> List.filter (\space -> isOpenSpaceOnBoard space board)
+            |> List.map ( \index -> index - indexOffset )
+            |> List.filter ( \space -> isOpenSpaceOnBoard space board )

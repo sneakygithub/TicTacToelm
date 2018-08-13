@@ -1,6 +1,11 @@
 module Game.Game exposing (..)
 
 import Game.Board as Board
+import Game.Player as Player exposing (Player)
+import Game.Ai as Ai
+
+import Util.ListPlus as ListPlus
+
 
 continueGame : Board.Board -> Bool
 continueGame board =
@@ -10,17 +15,57 @@ continueGame board =
 type alias GameState =
     { continue : Bool
     , board : Board.Board
+    , players : List Player
     }
 
 
-freshGame = GameState True ( List.repeat 9 Nothing )
-
-
-takeTurn : Board.Board -> Int -> GameState
-takeTurn board space =
+freshGame =
     let
-        newBoard = Board.markBoardSpaceWith board space "x"
+        board =
+            ( List.repeat 9 Nothing )
 
-        continue = continueGame newBoard
+        players =
+            [ Player (Player.Human) "x" , Player (Player.Ai) "o"]
     in
-        ( GameState continue newBoard )
+        GameState True board players
+
+
+takeTurn : GameState -> Maybe Int -> GameState
+takeTurn gameState move =
+    case move of
+        Nothing ->
+            Ai.playTurn gameState.board
+                |> takeTurn gameState
+
+        Just move ->
+            let
+                newBoard = Board.markBoardSpaceWith gameState.board move ( Just "x" )
+
+                continue = continueGame newBoard
+
+                players = ListPlus.rotateOne gameState.players
+
+                updatedGameState = ( GameState continue newBoard players )
+
+            in
+                case ( currentPlayer updatedGameState ) of
+                    Just currentPlayer  ->
+                        case (currentPlayer.kind) of
+                            Player.Ai ->
+                                if continue then
+                                    takeTurn updatedGameState Nothing
+                                else
+                                    updatedGameState
+
+                            Player.Human ->
+                                updatedGameState
+
+                    Nothing ->
+                        freshGame
+
+
+
+
+currentPlayer : GameState -> Maybe Player
+currentPlayer gameState =
+    List.head gameState.players
