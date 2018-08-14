@@ -39,13 +39,20 @@ takeTurn gameState move =
 
         Just move ->
             let
-                newBoard = Board.markBoardSpaceWith gameState.board move ( Just "x" )
+                player =
+                    currentPlayer gameState
 
-                continue = continueGame newBoard
+                newBoard =
+                    Player.takeTurnOnBoard player move gameState.board
 
-                players = ListPlus.rotateOne gameState.players
+                continue =
+                    continueGame newBoard
 
-                updatedGameState = ( GameState continue newBoard players )
+                players =
+                    ListPlus.rotateOne gameState.players
+
+                updatedGameState =
+                    ( GameState continue newBoard players )
 
             in
                 case ( currentPlayer updatedGameState ) of
