@@ -3,13 +3,16 @@ module Game.Game exposing (..)
 import Game.Board as Board
 import Game.Player as Player exposing (Player)
 import Game.Ai as Ai
+import Game.Rules as Rules
 
 import Util.ListPlus as ListPlus
 
 
 continueGame : Board.Board -> Bool
 continueGame board =
-    not ( Board.boardFull board )
+    not
+        ( ( Board.boardFull board )
+        ||  ( Rules.hasWinner board ) )
 
 
 type alias GameState =
@@ -22,10 +25,10 @@ type alias GameState =
 freshGame =
     let
         board =
-            ( List.repeat 9 Nothing )
+            ( List.repeat 9 Board.Empty )
 
         players =
-            [ Player (Player.Human) "x" , Player (Player.Ai) "o"]
+            [ Player (Player.Human) Board.X , Player (Player.Ai) Board.O]
     in
         GameState True board players
 
@@ -53,7 +56,6 @@ takeTurn gameState move =
 
                 updatedGameState =
                     ( GameState continue newBoard players )
-
             in
                 case ( currentPlayer updatedGameState ) of
                     Just currentPlayer  ->

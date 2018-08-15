@@ -11,18 +11,18 @@ suite : Test
 suite =
     describe "Board"
         [ describe "boardFull"
-            [ test "Returns false if board contains Nothing"
+            [ test "Returns false if board contains any empty space"
                 ( \() ->
-                    boardFull [ Just "x", Just "o", Just "x",
-                                Just "x", Nothing, Just "o",
-                                Nothing, Nothing, Just "x"
+                    boardFull [ X, O, X,
+                                X, Empty, O,
+                                Empty, Empty, X
                               ]
                         |> Expect.false "expected the board have open spaces" )
             , test "Returns true if board spaces are filled"
                 ( \() ->
-                    boardFull [ Just "x", Just "o", Just "x",
-                                Just "x", Just "o", Just "o",
-                                Just "o", Just "x", Just "x"
+                    boardFull [ X, O, X,
+                                X, O, O,
+                                O, X, X
                               ]
                         |> Expect.true "expected the board to be full" )
             ]
@@ -31,57 +31,46 @@ suite =
                 \() ->
                     let
                         startingBoard =
-                            [ Just "x", Just "o", Just "x",
-                              Just "x", Nothing, Just "o",
-                              Nothing, Nothing, Just "x"
+                            [ Empty, O, X,
+                              X, Empty, O,
+                              Empty, Empty, X
                             ]
 
                         expectedBoard =
-                            [ Just "x", Just "o", Just "x",
-                              Just "x", Just "o", Just "o",
-                              Nothing, Nothing, Just "x"
+                            [ Empty, O, X,
+                              X, O, O,
+                              Empty, Empty, X
                             ]
                     in
-                        markBoardSpaceWith startingBoard 4 (Just "o")
+                        markBoardSpaceWith startingBoard 4 (O)
                             |> Expect.equal expectedBoard
             , test "Returns a board with the desired space marked when given an empty board" <|
                 \() ->
                     let
                         startingBoard =
-                            [ Nothing, Nothing, Nothing,
-                              Nothing, Nothing, Nothing,
-                              Nothing, Nothing, Nothing
+                            [ Empty, Empty, Empty,
+                              Empty, Empty, Empty,
+                              Empty, Empty, Empty
                             ]
 
                         expectedBoard =
-                            [ Nothing, Nothing, Nothing,
-                              Nothing, Nothing, Nothing,
-                              Nothing, Nothing, Just "x"
+                            [ Empty, Empty, Empty,
+                              Empty, Empty, Empty,
+                              Empty, Empty, X
                             ]
                     in
-                        markBoardSpaceWith startingBoard 8 (Just "x")
+                        markBoardSpaceWith startingBoard 8 (X)
                             |> Expect.equal expectedBoard
-            , test "Returns the same board it was given when the marker is Nothing" <|
-                \() ->
-                    let
-                        startingBoard =
-                            [ Just "x", Just "o", Just "x"
-                            , Just "x", Nothing, Just "o"
-                            , Nothing, Nothing, Just "x"
-                            ]
-                    in
-                        markBoardSpaceWith startingBoard 7 Nothing
-                            |> Expect.equal startingBoard
             , test "Returns the same board it was given when the space is taken" <|
                 \() ->
                     let
                         startingBoard =
-                            [ Just "x", Just "o", Just "x"
-                            , Just "x", Nothing, Just "o"
-                            , Nothing, Nothing, Just "x"
+                            [ X, O, O
+                            , X, Empty, O
+                            , Empty, Empty, X
                             ]
                     in
-                        markBoardSpaceWith startingBoard 8 ( Just "o" )
+                        markBoardSpaceWith startingBoard 8 ( O )
                             |> Expect.equal startingBoard
             ]
         , describe "openSpaces"
@@ -89,9 +78,9 @@ suite =
                 \() ->
                     let
                         board =
-                            [ Nothing, Nothing, Nothing
-                            , Nothing, Nothing, Nothing
-                            , Nothing, Nothing, Nothing
+                            [ Empty, Empty, Empty
+                            , Empty, Empty, Empty
+                            , Empty, Empty, Empty
                             ]
                     in
                         openSpaces board
@@ -100,9 +89,9 @@ suite =
                 \() ->
                     let
                         board =
-                            [ Just "x", Just "o", Just "x"
-                            , Just "x", Nothing, Just "o"
-                            , Nothing, Nothing, Just "x"
+                            [ X, O, X
+                            , O, Empty, O
+                            , Empty, Empty, X
                             ]
                     in
                         openSpaces board
@@ -111,9 +100,9 @@ suite =
                 \() ->
                     let
                         board =
-                            [ Just "x", Just "o", Just "x"
-                            , Just "x", Just "o", Just "o"
-                            , Just "o", Just "x", Just "x"
+                            [ X, O, X
+                            , X, O, O
+                            , O, X, X
                             ]
                     in
                         openSpaces board
@@ -124,9 +113,9 @@ suite =
                 ( \() ->
                     let
                         board =
-                            [ Just "x", Just "o", Just "x"
-                            , Just "x", Nothing, Just "o"
-                            , Nothing, Nothing, Just "x"
+                            [ X, O, Empty
+                            , X, Empty, O
+                            , Empty, Empty, X
                             ]
                     in
                         isOpenSpaceOnBoard 4 board
@@ -135,12 +124,49 @@ suite =
                 ( \() ->
                     let
                         board =
-                            [ Just "x", Just "o", Just "x"
-                            , Just "x", Nothing, Just "o"
-                            , Nothing, Nothing, Just "x"
+                            [ X, O, X
+                            , X, Empty, O
+                            , Empty, Empty, Empty
                             ]
                     in
                         isOpenSpaceOnBoard 0 board
                             |> Expect.false "space should be taken")
+            ]
+        , describe "sideSize"
+            [ test "When given a 9 space (3x3) board, it returns 3" <|
+                \() ->
+                    let
+                        board =
+                            [ X, O, O
+                            , X, Empty, O
+                            , Empty, Empty, X
+                            ]
+                    in
+                        sideSize board
+                            |> Expect.equal 3
+            ]
+        , describe "getMaybeMarkerFromSpace"
+            [ test "Returns a marker from a marked space" <|
+                \() ->
+                    let
+                        board =
+                            [ X, O, X
+                            , O, Empty, O
+                            , Empty, Empty, X
+                            ]
+                    in
+                        getMarkerFromSpace 1 board
+                            |> Expect.equal O
+            , test "Returns Empty from an empty space" <|
+                \() ->
+                    let
+                        board =
+                            [ X, O, X
+                            , O, Empty, O
+                            , Empty, Empty, X
+                            ]
+                    in
+                        getMarkerFromSpace 4 board
+                            |> Expect.equal Empty
             ]
         ]

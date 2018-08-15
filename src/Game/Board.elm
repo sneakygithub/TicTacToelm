@@ -2,8 +2,12 @@ module Game.Board exposing (..)
 
 import Array
 
+type Space
+    = Empty
+    | X
+    | O
 
-type alias Board = List ( Maybe String )
+type alias Board = List Space
 
 
 boardFull : Board -> Bool
@@ -14,7 +18,7 @@ boardFull board =
         |> (==) 0
 
 
-markBoardSpaceWith : Board -> Int -> Maybe String -> Board
+markBoardSpaceWith : Board -> Int -> Space -> Board
 markBoardSpaceWith board space marker =
     if isOpenSpaceOnBoard space board then
         Array.fromList board
@@ -26,20 +30,27 @@ markBoardSpaceWith board space marker =
 
 isOpenSpaceOnBoard : Int -> Board -> Bool
 isOpenSpaceOnBoard space board =
-    let
-        existingMarker =
-            Array.fromList board
-                |> Array.get space
-    in
-        existingMarker == Just Nothing
+    ( getMarkerFromSpace space board ) == Empty
 
 
 openSpaces : Board -> List Int
 openSpaces board =
-    let
-        indexOffset = 1
-    in
-        List.length board
-            |>List.range indexOffset
-            |> List.map ( \index -> index - indexOffset )
-            |> List.filter ( \space -> isOpenSpaceOnBoard space board )
+    board
+        |> List.indexedMap (\index _ -> index)
+        |> List.filter (\space -> isOpenSpaceOnBoard space board)
+
+
+sideSize : Board -> Int
+sideSize board =
+    List.length board
+        |> toFloat
+        |> sqrt
+        |> round
+
+
+getMarkerFromSpace : Int -> Board -> Space
+getMarkerFromSpace space board =
+    Array.fromList board
+        |> Array.get space
+        |> Maybe.withDefault Empty
+

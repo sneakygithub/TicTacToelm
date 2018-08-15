@@ -9,20 +9,20 @@ type PlayerType
 
 type alias Player =
     { kind : PlayerType
-    , marker : String
+    , marker : Board.Space
     }
 
 
 takeTurnOnBoard : Maybe Player -> Int -> Board.Board -> Board.Board
 takeTurnOnBoard player move board =
-    Board.markBoardSpaceWith board move (getMaybeMarker player)
+    Board.markBoardSpaceWith board move (getMarkerOrEmpty player)
 
 
-getMaybeMarker : Maybe Player -> Maybe String
-getMaybeMarker player =
-    Maybe.map getMarker player
+getMarkerOrEmpty : Maybe Player -> Board.Space
+getMarkerOrEmpty player =
+    case player of
+        Nothing ->
+            Board.Empty
 
-
-getMarker : Player -> String
-getMarker player =
-    player.marker
+        Just player ->
+            player.marker

@@ -1,13 +1,14 @@
 module BrowserInterface.ViewTest exposing (..)
 
 import Expect
-import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
 import Html exposing (div, text)
 import Html.Events exposing (onClick)
 
 import BrowserInterface.View exposing (..)
 import BrowserInterface.Msgs as Msgs
+
+import Game.Board exposing (Space(..))
 
 
 suite : Test
@@ -18,7 +19,7 @@ suite =
                 \() ->
                     let
                         space =
-                            Nothing
+                            Empty
 
                         expectedResult =
                             div [ spaceStyle, onClick (Msgs.Mark 6) ] [ text " " ]
@@ -29,7 +30,7 @@ suite =
                 \() ->
                     let
                         space =
-                            Just "x"
+                            X
 
                         expectedResult =
                             div [ spaceStyle ] [ text "x" ]
@@ -42,9 +43,9 @@ suite =
                 \() ->
                     let
                         spaces =
-                            [ renderSpace 0 Nothing
-                            , renderSpace 1 Nothing
-                            , renderSpace 2 Nothing
+                            [ renderSpace 0 Empty
+                            , renderSpace 1 Empty
+                            , renderSpace 2 Empty
                             ]
 
                         expectedResult =
@@ -95,30 +96,30 @@ suite =
                 \() ->
                     let
                         spaces =
-                            List.repeat 9 Nothing
+                            List.repeat 9 Empty
 
                         divs =
                             div [ spaceStyle, onClick (Msgs.Mark 4) ] [ text " " ]
 
                         innerDiv1 =
                             div [class "row"] (
-                                [ renderSpace 0 Nothing
-                                , renderSpace 1 Nothing
-                                , renderSpace 2 Nothing
+                                [ renderSpace 0 Empty
+                                , renderSpace 1 Empty
+                                , renderSpace 2 Empty
                                 ])
 
                         innerDiv2 =
                             div [class "row"] (
-                                [ renderSpace 3 Nothing
-                                , renderSpace 4 Nothing
-                                , renderSpace 5 Nothing
+                                [ renderSpace 3 Empty
+                                , renderSpace 4 Empty
+                                , renderSpace 5 Empty
                                 ])
 
                         innerDiv3 =
                             div [class "row"] (
-                                [ renderSpace 6 Nothing
-                                , renderSpace 7 Nothing
-                                , renderSpace 8 Nothing
+                                [ renderSpace 6 Empty
+                                , renderSpace 7 Empty
+                                , renderSpace 8 Empty
                                 ])
 
 
@@ -131,9 +132,9 @@ suite =
                 \() ->
                     let
                         spaces =
-                            [ Just "x", Just "o", Just "x"
-                            , Just "o", Just "o", Just "x"
-                            , Just "x", Just "x", Just "o"
+                            [ X, O, X
+                            , O, O, X
+                            , X, X, O
                             ]
 
                         xdiv =
@@ -157,9 +158,9 @@ suite =
                 \() ->
                     let
                         spaces =
-                            [ Nothing, Nothing, Just "o"
-                            , Just "o", Nothing, Just "x"
-                            , Just "x", Just "x", Just "o"
+                            [ Empty, Empty, O
+                            , O, Empty, X
+                            , X, X, O
                             ]
 
                         xdiv =
@@ -169,8 +170,8 @@ suite =
                             div [ spaceStyle ] [ text "o" ]
 
                         innerDivs =
-                            [ div [ class "row" ] [ (renderSpace 0 Nothing), (renderSpace 1 Nothing), odiv ]
-                            , div [ class "row" ] [ odiv, (renderSpace 4 Nothing), xdiv ]
+                            [ div [ class "row" ] [ (renderSpace 0 Empty), (renderSpace 1 Empty), odiv ]
+                            , div [ class "row" ] [ odiv, (renderSpace 4 Empty), xdiv ]
                             , div [ class "row" ] [ xdiv, xdiv, odiv ]
                             ]
 
@@ -179,5 +180,20 @@ suite =
                     in
                         renderBoard spaces
                             |> Expect.equal expectedResult
+            ]
+        , describe "spaceToText"
+            [ test "When given an X marked space, it returns x" <|
+                \() ->
+                    spaceToText X
+                        |> Expect.equal "x"
+            , test "When given an O marked space, it returns o" <|
+                \() ->
+                    spaceToText O
+                        |> Expect.equal "o"
+            , test "When given anything else it marks ?" <|
+                \() ->
+                    spaceToText Empty
+                        |> Expect.equal "?"
+
             ]
         ]

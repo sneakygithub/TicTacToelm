@@ -31,5 +31,3 @@ rotateOne list =
                 |>Maybe.withDefault []
     in
         List.append tail head
-
-

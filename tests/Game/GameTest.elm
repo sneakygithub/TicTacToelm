@@ -6,6 +6,7 @@ import Test exposing (..)
 
 import Game.Game exposing (..)
 import Game.Player as Player exposing (Player)
+import Game.Board exposing (Space(..))
 
 suite : Test
 suite =
@@ -15,9 +16,9 @@ suite =
                 \() ->
                     let
                         fullBoard =
-                            [ Just "x", Just "o", Just "x"
-                            , Just "x", Just "o", Just "o"
-                            , Just "o", Just "x", Just "x"
+                            [ X, O, X
+                            , X, O, O
+                            , O, X, X
                             ]
                     in
                         continueGame fullBoard
@@ -26,48 +27,59 @@ suite =
                 \() ->
                     let
                         openBoard =
-                            [ Just "x", Just "o", Just "x"
-                            , Just "x", Nothing, Just "o"
-                            , Just "o", Just "x", Just "x"
+                            [ X, O, X
+                            , O, Empty, O
+                            , O, X, X
                             ]
                     in
                         continueGame openBoard
                             |> Expect.equal True
+            , test "A winner ends the game" <|
+                \() ->
+                    let
+                        wonBoard =
+                            [ X, O, X
+                            , O, Empty, X
+                            , O, O, X
+                            ]
+                    in
+                        continueGame wonBoard
+                            |> Expect.equal False
             ]
         , describe "currentPlayer"
             [ test "It returns the current player if the current player is a human" <|
                 \() ->
                     let
                     board =
-                        ( List.repeat 9 Nothing )
+                        ( List.repeat 9 Empty )
 
                     players =
-                        [ Player Player.Human "x" , Player Player.Ai "o"]
+                        [ Player Player.Human X , Player Player.Ai O]
 
                     gameState =
                         GameState True board players
                 in
                     currentPlayer gameState
-                        |> Expect.equal (Just (Player Player.Human "x"))
+                        |> Expect.equal (Just (Player Player.Human X))
             , test "It returns the current player if the current player is an AI" <|
                 \() ->
                     let
                     board =
-                        ( List.repeat 9 Nothing )
+                        ( List.repeat 9 Empty )
 
                     players =
-                        [ Player Player.Ai "o", Player Player.Human "x" ]
+                        [ Player Player.Ai O, Player Player.Human X ]
 
                     gameState =
                         GameState True board players
                 in
                     currentPlayer gameState
-                        |> Expect.equal (Just (Player Player.Ai "o"))
+                        |> Expect.equal (Just (Player Player.Ai O))
             , test "It returns Nothing if there are no players" <|
                 \() ->
                     let
                     board =
-                        ( List.repeat 9 Nothing )
+                        ( List.repeat 9 Empty )
 
                     players =
                         [ ]

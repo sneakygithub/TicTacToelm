@@ -5,6 +5,7 @@ import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
 
 import Game.Ai exposing (..)
+import Game.Board exposing (Space(..))
 
 
 suite : Test
@@ -15,9 +16,9 @@ suite =
                 \() ->
                     let
                         board =
-                            [ Just "x", Just "o", Just "x"
-                            , Just "x", Nothing, Just "o"
-                            , Just "o", Just "x", Just "x"
+                            [ X, O, X
+                            , X, Empty, O
+                            , O, X, X
                             ]
                     in
                         playTurn board
@@ -26,9 +27,9 @@ suite =
                 \() ->
                     let
                         board =
-                            [ Nothing, Nothing, Nothing
-                            , Nothing, Just "x", Nothing
-                            , Nothing, Nothing, Nothing
+                            [ Empty, Empty, Empty
+                            , Empty, X, Empty
+                            , Empty, Empty, Empty
                             ]
                     in
                         playTurn board
@@ -37,9 +38,9 @@ suite =
                 \() ->
                     let
                         board =
-                            [ Just "x", Just "o", Just "x"
-                            , Just "x", Just "o", Just "o"
-                            , Just "o", Just "x", Just "x"
+                            [ X, O, X
+                            , X, O, O
+                            , O, X, X
                             ]
                     in
                         playTurn board

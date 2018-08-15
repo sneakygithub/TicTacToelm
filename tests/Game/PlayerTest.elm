@@ -5,46 +5,40 @@ import Fuzz exposing (Fuzzer, int, list, string)
 import Test exposing (..)
 
 import Game.Player exposing (..)
-
+import Game.Board exposing (Space(..))
 
 suite : Test
 suite =
     describe "Player"
-        [ describe "getMaybeMarker"
+        [ describe "getMarkerOrEmpty"
             [ test "When given an Ai player, it returns the marker" <|
                 \() ->
-                getMaybeMarker ( Just ( Player Ai "🤖") )
-                    |> Expect.equal ( Just "🤖" )
+                getMarkerOrEmpty ( Just ( Player Ai X) )
+                    |> Expect.equal X
             , test "When given a Human player, it returns the marker" <|
                 \() ->
-                getMaybeMarker ( Just (Player Human "🚹") )
-                    |> Expect.equal ( Just "🚹" )
-            , test "When given Nothing it returns Nothing" <|
+                getMarkerOrEmpty ( Just (Player Human O) )
+                    |> Expect.equal O
+            , test "When given nothing it returns empty" <|
                 \() ->
-                getMaybeMarker Nothing
-                    |> Expect.equal Nothing
-            ]
-        , describe "getMarker"
-            [ test "When given a player it returns the marker" <|
-                \() ->
-                getMarker  ( Player Human "💕" )
-                    |> Expect.equal "💕"
+                getMarkerOrEmpty Nothing
+                    |> Expect.equal Empty
             ]
         , describe "takeTurnOnBoard"
             [ test "When given a partly filled board a player and a space, it returns the space marked with the player's marker" <|
                 \() ->
                     let
-                        player = (Player Ai "o")
+                        player = (Player Ai O)
                         startingBoard =
-                            [ Just "x", Just "o", Just "x",
-                              Just "x", Nothing, Just "o",
-                              Nothing, Nothing, Just "x"
+                            [ X, O, X,
+                              X, Empty, O,
+                              Empty, Empty, X
                             ]
 
                         expectedBoard =
-                            [ Just "x", Just "o", Just "x",
-                              Just "x", Just "o", Just "o",
-                              Nothing, Nothing, Just "x"
+                            [ X, O, X,
+                              X, O, O,
+                              Empty, Empty, X
                             ]
                     in
                         takeTurnOnBoard (Just player) 4 startingBoard
@@ -53,9 +47,9 @@ suite =
                 \() ->
                     let
                         startingBoard =
-                            [ Just "x", Just "o", Just "x"
-                            , Just "x", Nothing, Just "o"
-                            , Nothing, Nothing, Just "x"
+                            [ X, O, X
+                            , X, Empty, O
+                            , Empty, Empty, X
                             ]
                     in
                         takeTurnOnBoard Nothing 7 startingBoard

@@ -12,6 +12,7 @@ import Html.Events exposing (onClick)
 
 
 import Game.Game exposing (GameState)
+import Game.Board as Board
 
 import Debug
 
@@ -39,9 +40,10 @@ loop model =
 
 
 -- TODO: Could this adhere more to the SRP?
-renderBoard : List (Maybe String) -> Html Msg
+renderBoard : Board.Board -> Html Msg
 renderBoard board =
     let
+        sideSize = Board.sideSize board
         spaces = List.indexedMap renderSpace board
         rows = ListPlus.split 3 spaces
         renderedRows = List.map renderRow rows
@@ -56,14 +58,27 @@ renderRow spaces =
      div [ class "row" ] spaces
 
 
-renderSpace : Int -> ( Maybe String ) -> Html Msg
+renderSpace : Int -> Board.Space -> Html Msg
 renderSpace index space =
     case space of
-        Just space ->
-            div [spaceStyle] [text space]
-
-        Nothing ->
+        Board.Empty ->
             div [spaceStyle, onClick (Msgs.Mark index) ] [ text " "]
+
+        _ ->
+            div [spaceStyle] [ text (spaceToText space) ]
+
+
+spaceToText : Board.Space -> String
+spaceToText space =
+    case space of
+        Board.X ->
+            "x"
+
+        Board.O ->
+            "o"
+
+        Board.Empty ->
+            "?"
 
 
 class : String -> Html.Attribute msg
