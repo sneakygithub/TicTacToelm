@@ -10,7 +10,20 @@ import Game.Board exposing (..)
 suite : Test
 suite =
     describe "Board"
-        [ describe "boardFull"
+        [ describe "renderEmptyBoard"
+            [ test "returns a board of the right number of empty spaces" <|
+                \() ->
+                    let
+                        board =
+                            [ Empty, Empty, Empty
+                            , Empty, Empty, Empty
+                            , Empty, Empty, Empty
+                            ]
+                    in
+                        renderEmptyBoard 9
+                            |> Expect.equal board
+            ]
+        , describe "boardFull"
             [ test "Returns false if board contains any empty space"
                 ( \() ->
                     boardFull [ X, O, X,

@@ -10,6 +10,11 @@ type Space
 type alias Board = List Space
 
 
+renderEmptyBoard : Int -> Board
+renderEmptyBoard totalSpaces =
+    List.repeat totalSpaces Empty
+
+
 boardFull : Board -> Bool
 boardFull board =
     board

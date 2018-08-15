@@ -2,7 +2,6 @@ module Game.Rules exposing (..)
 
 import Game.Board as Board exposing (Board)
 import Game.Player as Player exposing (Player)
-import Game.Ai as Ai
 
 import Util.ListPlus as ListPlus
 

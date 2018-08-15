@@ -25,7 +25,7 @@ type alias GameState =
 freshGame =
     let
         board =
-            ( List.repeat 9 Board.Empty )
+            Board.renderEmptyBoard 9
 
         players =
             [ Player (Player.Human) Board.X , Player (Player.Ai) Board.O]
@@ -37,7 +37,7 @@ takeTurn : GameState -> Maybe Int -> GameState
 takeTurn gameState move =
     case move of
         Nothing ->
-            Ai.playTurn gameState.board
+            Ai.playTurn gameState.board ( ListPlus.rotateOne gameState.players )
                 |> takeTurn gameState
 
         Just move ->
