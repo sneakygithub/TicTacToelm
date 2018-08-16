@@ -1,26 +1,24 @@
 module Game.Ai exposing (..)
 
 import Game.Board as Board exposing (Board)
-import Game.Rules as Rules
 import Game.Player as Player exposing (Player)
-
-import Util.Math as Math
+import Game.Rules as Rules
 import Util.ListPlus as ListPlus
+import Util.Math as Math
 
-
-import Debug
 
 type alias MiniMaxHelper =
     { board : Board
     , players : List Player
-    , turnDeterminer : ( Int -> Bool )
+    , turnDeterminer : Int -> Bool
     }
 
 
 playTurn : Board -> List Player -> Maybe Int
 playTurn board players =
     let
-        miniMaxHelper = MiniMaxHelper board players ( getTurnDeterminer board )
+        miniMaxHelper =
+            MiniMaxHelper board players (getTurnDeterminer board)
     in
         bestMove miniMaxHelper
 
@@ -29,14 +27,13 @@ deduceTurn : Board -> Int
 deduceTurn board =
     Board.openSpaces board
         |> List.length
-        |> (-) ( List.length board )
+        |> (-) (List.length board)
 
 
-getTurnDeterminer : Board -> ( Int -> Bool )
+getTurnDeterminer : Board -> (Int -> Bool)
 getTurnDeterminer board =
-    if ( Math.isEven ( deduceTurn board ) ) then
+    if (Math.isEven (deduceTurn board)) then
         Math.isEven
-
     else
         Math.isOdd
 
@@ -47,39 +44,37 @@ getCurrentMarker players =
         |> Player.getMarkerOrEmpty
 
 
-isCurrentPlayer : Board -> ( Int -> Bool ) -> Bool
+isCurrentPlayer : Board -> (Int -> Bool) -> Bool
 isCurrentPlayer board turnDeterminer =
     deduceTurn board
         |> turnDeterminer
 
 
-winPoints : Board -> ( Int -> Bool) -> Int
+winPoints : Board -> (Int -> Bool) -> Int
 winPoints board turnDeterminer =
     let
-        turn  =
+        turn =
             (deduceTurn board)
 
         maxPoints =
-            ( List.length board ) + 1
+            (List.length board) + 1
 
         points =
             turn
                 |> (-) maxPoints
     in
-        if ( isCurrentPlayer board turnDeterminer ) then
+        if (isCurrentPlayer board turnDeterminer) then
             points
-
         else
             -points
 
 
-chooseBestScore : List Int -> Board -> ( Int -> Bool ) -> Int
+chooseBestScore : List Int -> Board -> (Int -> Bool) -> Int
 chooseBestScore scores board turnDeterminer =
     let
         bestScore =
             if (isCurrentPlayer board turnDeterminer) then
                 List.maximum scores
-
             else
                 List.minimum scores
     in
@@ -91,7 +86,7 @@ chooseBestScore scores board turnDeterminer =
                 0
 
 
-scoreTurn : Board -> Int -> List Player -> ( Int -> Bool ) -> Int
+scoreTurn : Board -> Int -> List Player -> (Int -> Bool) -> Int
 scoreTurn board space players turnDeterminer =
     let
         turnMarker =
@@ -105,12 +100,10 @@ scoreTurn board space players turnDeterminer =
     in
         if Rules.hasWinner newBoard then
             winPoints board turnDeterminer
-
         else if Board.boardFull newBoard then
             0
-
         else
-            miniMax ( MiniMaxHelper newBoard ( ListPlus.rotateOne players ) turnDeterminer )
+            miniMax (MiniMaxHelper newBoard (ListPlus.rotateOne players) turnDeterminer)
 
 
 calculateScores : MiniMaxHelper -> List Int
@@ -126,7 +119,8 @@ calculateScores miniMaxHelper =
 miniMax : MiniMaxHelper -> Int
 miniMax miniMaxHelper =
     let
-        scores =  calculateScores miniMaxHelper
+        scores =
+            calculateScores miniMaxHelper
     in
         chooseBestScore scores miniMaxHelper.board miniMaxHelper.turnDeterminer
 
@@ -145,7 +139,6 @@ bestMove miniMaxHelper =
 
         scoredSpaces =
             List.map2 (,) scores openSpaces
-
     in
         List.maximum scoredSpaces
             |> Maybe.map Tuple.second

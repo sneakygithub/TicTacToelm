@@ -7,6 +7,7 @@ type PlayerType
     = Human
     | Ai
 
+
 type alias Player =
     { kind : PlayerType
     , marker : Board.Space

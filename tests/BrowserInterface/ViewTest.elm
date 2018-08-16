@@ -193,7 +193,7 @@ suite =
             , test "When given anything else it marks ?" <|
                 \() ->
                     spaceToText Empty
-                        |> Expect.equal "?"
+                        |> Expect.equal " "
 
             ]
         ]

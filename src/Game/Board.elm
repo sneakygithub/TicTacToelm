@@ -2,12 +2,15 @@ module Game.Board exposing (..)
 
 import Array
 
+
 type Space
     = Empty
     | X
     | O
 
-type alias Board = List Space
+
+type alias Board =
+    List Space
 
 
 renderEmptyBoard : Int -> Board
@@ -35,7 +38,7 @@ markBoardSpaceWith board space marker =
 
 isOpenSpaceOnBoard : Int -> Board -> Bool
 isOpenSpaceOnBoard space board =
-    ( getMarkerFromSpace space board ) == Empty
+    (getMarkerFromSpace space board) == Empty
 
 
 openSpaces : Board -> List Int
@@ -58,4 +61,3 @@ getMarkerFromSpace space board =
     Array.fromList board
         |> Array.get space
         |> Maybe.withDefault Empty
-

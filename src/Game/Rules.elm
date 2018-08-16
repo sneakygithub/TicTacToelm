@@ -2,10 +2,8 @@ module Game.Rules exposing (..)
 
 import Game.Board as Board exposing (Board)
 import Game.Player as Player exposing (Player)
-
 import Util.ListPlus as ListPlus
 
-import Debug
 import Array
 import Set
 
@@ -29,35 +27,39 @@ getWinner board =
         |> Maybe.andThen List.head
 
 
-didMeetWinCondition : List (Board.Space) -> Bool
+didMeetWinCondition : List Board.Space -> Bool
 didMeetWinCondition inARow =
-    (not ( List.any ( (==) Board.Empty ) inARow ) )
-        && ( ( ListPlus.rotateOne inARow ) == inARow )
+    (not (List.any ((==) Board.Empty) inARow))
+        && ((ListPlus.rotateOne inARow) == inARow)
 
 
-potentialWins : Board -> List ( List Board.Space)
+potentialWins : Board -> List (List Board.Space)
 potentialWins board =
     let
         winOptions =
             allWinOptions board
     in
         winOptions
-            |>List.map
-                (\winCondition -> List.map (\space -> Board.getMarkerFromSpace space board) winCondition)
+            |> List.map
+                (\winCondition ->
+                    List.map
+                        (\space -> Board.getMarkerFromSpace space board)
+                        winCondition
+                )
 
 
 allWinOptions : Board -> List (List Int)
 allWinOptions board =
-    ( diagonalWinOptions board )
-        |> List.append ( verticalWinOptions board )
-        |> List.append ( horizontalWinOptions board )
+    (diagonalWinOptions board)
+        |> List.append (verticalWinOptions board)
+        |> List.append (horizontalWinOptions board)
 
 
 horizontalWinOptions : Board -> List (List Int)
 horizontalWinOptions board =
     board
         |> List.indexedMap (\index _ -> index)
-        |> ListPlus.split ( Board.sideSize board )
+        |> ListPlus.split (Board.sideSize board)
 
 
 verticalWinOptions : Board -> List (List Int)
@@ -65,11 +67,11 @@ verticalWinOptions board =
     colBuilder (Board.sideSize board) []
 
 
-
 colBuilder : Int -> List (List Int) -> List (List Int)
 colBuilder sideSize cols =
     let
-        length = List.length cols
+        length =
+            List.length cols
     in
         if (length < sideSize) then
             sideSize
@@ -99,5 +101,3 @@ diagonalWinOptions board =
         []
             |> (::) topRightDiagonal
             |> (::) topLeftDiagonal
-
-
