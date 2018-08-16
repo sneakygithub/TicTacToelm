@@ -37,7 +37,7 @@ takeTurn : GameState -> Maybe Int -> GameState
 takeTurn gameState move =
     case move of
         Nothing ->
-            Ai.playTurn gameState.board (ListPlus.rotateOne gameState.players)
+            Ai.playTurn gameState.board gameState.players
                 |> takeTurn gameState
 
         Just move ->

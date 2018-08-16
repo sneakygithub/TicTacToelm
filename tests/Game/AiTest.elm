@@ -146,6 +146,17 @@ suite =
                     in
                         List.any ( (==) (playTurn board aiIsO) ) [Just 1, Just 2]
                             |> Expect.equal False
+            , test "takes a win in a potential fork situation" <|
+                \() ->
+                    let
+                        board =
+                            [ Empty, X, Empty
+                            , X, Empty, Empty
+                            , O, Empty, O
+                            ]
+                    in
+                        playTurn board aiIsO
+                            |> Expect.equal (Just 7)
             ]
         , describe "deduceTurn"
             [ test "given a board with no marked spaces, it returns 0" <|

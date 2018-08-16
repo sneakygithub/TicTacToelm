@@ -17,11 +17,11 @@ update msg model =
                     updatedGameState =
                         { currentGameState | continue = False }
                 in
-                    ( { model | gameState = updatedGameState }, Cmd.none )
+                    ( { model | gameState = updatedGameState}, Cmd.none )
 
             Msgs.Mark space ->
                 let
                     updatedGameState =
                         Game.takeTurn currentGameState (Just space)
                 in
-                    ( { model | gameState = updatedGameState }, Cmd.none )
+                    ( { model | gameState = updatedGameState}, Cmd.none )

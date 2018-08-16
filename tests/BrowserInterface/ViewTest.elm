@@ -22,7 +22,7 @@ suite =
                             Empty
 
                         expectedResult =
-                            div [ spaceStyle, onClick (Msgs.Mark 6) ] [ text " " ]
+                            div [ class "space", onClick (Msgs.Mark 6) ] [ text " " ]
                     in
                         renderSpace 6 space
                             |> Expect.equal expectedResult
@@ -33,7 +33,7 @@ suite =
                             X
 
                         expectedResult =
-                            div [ spaceStyle ] [ text "x" ]
+                            div [ class "space" ] [ text "x" ]
                     in
                         renderSpace 0 space
                             |> Expect.equal expectedResult
@@ -57,10 +57,10 @@ suite =
                 \() ->
                     let
                         xdiv =
-                            div [ spaceStyle ] [ text "x" ]
+                            div [ class "space" ] [ text "x" ]
 
                         odiv =
-                            div [ spaceStyle ] [ text "o" ]
+                            div [ class "space" ] [ text "o" ]
 
                         spaces =
                             [xdiv, odiv, xdiv]
@@ -74,13 +74,13 @@ suite =
                 \() ->
                     let
                         blankdiv =
-                            div [ spaceStyle, onClick (Msgs.Mark 0) ] [ text " " ]
+                            div [ class "space", onClick (Msgs.Mark 0) ] [ text " " ]
 
                         xdiv =
-                            div [ spaceStyle ] [ text "x" ]
+                            div [ class "space" ] [ text "x" ]
 
                         odiv =
-                            div [ spaceStyle ] [ text "o" ]
+                            div [ class "space" ] [ text "o" ]
 
                         spaces =
                             [blankdiv, odiv, xdiv]
@@ -95,11 +95,20 @@ suite =
             [ test "Given a list of empty spaces, it renders an empty board" <|
                 \() ->
                     let
-                        spaces =
+                        board =
                             List.repeat 9 Empty
 
-                        divs =
-                            div [ spaceStyle, onClick (Msgs.Mark 4) ] [ text " " ]
+                        spaces =
+                                [ renderSpace 0 Empty
+                                , renderSpace 1 Empty
+                                , renderSpace 2 Empty
+                                , renderSpace 3 Empty
+                                , renderSpace 4 Empty
+                                , renderSpace 5 Empty
+                                , renderSpace 6 Empty
+                                , renderSpace 7 Empty
+                                , renderSpace 8 Empty
+                                ]
 
                         innerDiv1 =
                             div [class "row"] (
@@ -126,22 +135,28 @@ suite =
                         expectedResult =
                             div [ class "board" ] [ innerDiv1, innerDiv2, innerDiv3]
                     in
-                        renderBoard spaces
+                        renderBoard board spaces
                             |> Expect.equal expectedResult
             , test "Given a list of taken spaces, it renders the proper markers" <|
                 \() ->
                     let
-                        spaces =
+                        board =
                             [ X, O, X
                             , O, O, X
                             , X, X, O
                             ]
 
                         xdiv =
-                            div [ spaceStyle ] [ text "x" ]
+                            div [ class "space" ] [ text "x" ]
 
                         odiv =
-                            div [ spaceStyle ] [ text "o" ]
+                            div [ class "space" ] [ text "o" ]
+
+                        spaces =
+                                [ xdiv, odiv, xdiv
+                                , odiv, odiv, xdiv
+                                , xdiv, xdiv, odiv
+                                ]
 
                         innerDivs =
                             [ div [ class "row" ] [ xdiv, odiv, xdiv ]
@@ -152,22 +167,28 @@ suite =
                         expectedResult =
                             div [ class "board" ] innerDivs
                     in
-                        renderBoard spaces
+                        renderBoard board spaces
                             |> Expect.equal expectedResult
             ,test "Given a list of taken and empty spaces, it renders the proper markers or empty spaces" <|
                 \() ->
                     let
-                        spaces =
+                        board =
                             [ Empty, Empty, O
                             , O, Empty, X
                             , X, X, O
                             ]
 
                         xdiv =
-                            div [ spaceStyle ] [ text "x" ]
+                            div [ class "space" ] [ text "x" ]
 
                         odiv =
-                            div [ spaceStyle ] [ text "o" ]
+                            div [ class "space" ] [ text "o" ]
+
+                        spaces =
+                                [ (renderSpace 0 Empty), (renderSpace 1 Empty), odiv
+                                , odiv, (renderSpace 4 Empty), xdiv
+                                , xdiv, xdiv, odiv
+                                ]
 
                         innerDivs =
                             [ div [ class "row" ] [ (renderSpace 0 Empty), (renderSpace 1 Empty), odiv ]
@@ -178,7 +199,7 @@ suite =
                         expectedResult =
                             div [ class "board" ] innerDivs
                     in
-                        renderBoard spaces
+                        renderBoard board spaces
                             |> Expect.equal expectedResult
             ]
         , describe "spaceToText"

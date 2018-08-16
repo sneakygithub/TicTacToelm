@@ -12,8 +12,7 @@ type alias Model =
 
 
 type Page
-    = WelcomePage
-    | GamePage
+    = GamePage
 
 
 

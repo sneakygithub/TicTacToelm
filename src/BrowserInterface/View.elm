@@ -14,21 +14,18 @@ import Html.Events exposing (onClick)
 
 view : Model -> Html Msg
 view model =
-    case model.page of
-        Models.GamePage ->
-            loop model.gameState
+    loop model.gameState
 
 
 loop : GameState -> Html Msg
 loop model =
     if model.continue then
-        div []
-            [ renderBoard model.board
-            , div [ onClick Msgs.Stop ] [ text "Stop" ]
-            ]
+        div [] [ renderActiveBoard model.board ]
     else
         div []
-            [ text "Game Over" ]
+            [ renderEndBoard model.board
+            , div [] [text "Game Over" ]
+            ]
 
 
 renderActiveBoard : Board.Board -> Html Msg
@@ -39,11 +36,11 @@ renderActiveBoard board =
 
 renderEndBoard : Board.Board -> Html Msg
 renderEndBoard board =
-    List.indexedMap renderSpace board
+    List.indexedMap renderInactiveSpace board
         |> renderBoard board
 
 
-renderBoard : Board.Board -> Html Msg
+renderBoard : Board.Board -> List (Html Msg) -> Html Msg
 renderBoard board spaces =
     let
         sideSize =
