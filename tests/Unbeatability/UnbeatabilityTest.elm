@@ -70,7 +70,7 @@ simulator board =
 suite : Test
 suite =
     describe "UnbeatabilityTest"
-        [ skip <| test "every possible game"
+        [ test "every possible game"
             ( \() ->
                 simulator startingBoard
                     |> Expect.true "the game should be unbeatable" )

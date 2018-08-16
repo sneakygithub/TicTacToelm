@@ -29,7 +29,7 @@ $ brew install elm
 
   Tests are built with elm's built-in test suite. Use `$ elm-test` to run the test suite.
 
- A thorough minimax test has been included, but is currently being skipped for performance. To run this test, navigate to the file `/tests/Unbeatability/UnbeatabilityTest.elm` and remove `skip <|` from in front of the test in the file.
+ A thorough minimax test has been included. To skip for performance, navigate to the file `/tests/Unbeatability/UnbeatabilityTest.elm` and add `skip <|` in front of the `test` in the file.
 
 
 ## Built With:
