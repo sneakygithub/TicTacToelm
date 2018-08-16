@@ -1,0 +1,30 @@
+{
+  "name": "TicTacToelm",
+  "version": "1.0.0",
+  "description": "Play Tic Tac Toe! But with Elm?",
+  "main": "main.js",
+  "dependencies": {
+    "css-loader": "^0.26.1",
+    "elm-webpack-loader": "^4.2.0",
+    "file-loader": "^0.10.0",
+    "font-awesome": "4",
+    "json-server": "0.9.5",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.0"
+  },
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "dev": "webpack-dev-server --port 3000"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sneakygithub/TicTacToelm"
+  },
+  "author": "Incog Neato (shhh, it's a secret!)",
+  "license": "MIT",
+  "homepage": ""
+}

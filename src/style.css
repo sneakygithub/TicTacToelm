@@ -1,0 +1,15 @@
+body {
+  background-color: aliceblue;
+}
+
+.space {
+  vertical-align: top;
+  height: 50px;
+  width: 50px;
+  border: solid 2px blue;
+  display: inline-block;
+}
+
+.hide {
+  display: none;
+}
