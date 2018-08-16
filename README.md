@@ -1,5 +1,6 @@
 # TIC TAC TOElm
-----------
+---------- 
+(https://travis-ci.org/sneakygithub/TicTacToelm.svg?branch=master)
 
 [Tic Tac Toe!](https://en.wikipedia.org/wiki/Tic-tac-toe) The game of trying to get three of your markers in a row before your opponent does!
 
